@@ -8,8 +8,8 @@ function putAccessToken(accessToken) {
   return localStorage.setItem("accessToken", accessToken);
 }
 
-async function fethcWithToken(url, options = {}) {
-  fetch(url, {
+async function fetchWithToken(url, options = {}) {
+  return fetch(url, {
     ...options,
     headers: {
       ...options.headers,
@@ -57,11 +57,10 @@ async function register({ name, email, password }) {
 }
 
 async function getUserLogged() {
-  const response = await fethcWithToken(`${BASE_URL}/users/me`);
+  const response = await fetchWithToken(`${BASE_URL}/users/me`);
   const responseJson = await response.json();
 
   if (responseJson.status !== "success") {
-    alert(responseJson.message);
     return { error: true, data: null };
   }
 
@@ -69,15 +68,16 @@ async function getUserLogged() {
 }
 
 async function addContact({ name, tag }) {
-  const response = await fethcWithToken(`${BASE_URL}/contacts`, {
+  const response = await fetchWithToken(`${BASE_URL}/contacts`, {
     method: "POST",
     headers: {
-      Content_Type: "application/json",
+      "Content-Type": "application/json",
     },
     body: JSON.stringify({ name, tag }),
   });
 
-  const responseJson = response.json();
+  const responseJson = await response.json();
+
   if (responseJson.status !== "success") {
     alert(responseJson.message);
     return { error: true };
@@ -87,7 +87,7 @@ async function addContact({ name, tag }) {
 }
 
 async function getContacts() {
-  const response = await fetch(`${BASE_URL}/contacts`);
+  const response = await fetchWithToken(`${BASE_URL}/contacts`);
   const responseJson = await response.json();
 
   if (responseJson.status !== "success") {
@@ -99,11 +99,12 @@ async function getContacts() {
 }
 
 async function deleteContact(id) {
-  const response = await fetch(`${BASE_URL}/contacts/${id}`, {
+  const response = await fetchWithToken(`${BASE_URL}/contacts/${id}`, {
     method: "DELETE",
   });
 
   const responseJson = await response.json();
+
   if (responseJson.status !== "success") {
     alert(responseJson.message);
     return { error: true };
