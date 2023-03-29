@@ -10,8 +10,10 @@ const Navigation = ({ logout, name }) => {
         return (
           <nav className="navigation">
             <ul>
-              <li onClick={toggleLocale}>
-                <button>{locale === "id" ? "en" : "id"}</button>
+              <li>
+                <button onClick={toggleLocale}>
+                  {locale === "id" ? "en" : "id"}
+                </button>
               </li>
               <li>
                 <Link to="/">
